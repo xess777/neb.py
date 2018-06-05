@@ -1,5 +1,32 @@
-build/*
-dist/*
-nebpy.egg-info/*
-.idea/*
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+.Python
+env/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE specific
+**/.idea/*
+.ropeproject/*
+.codeintel/*
+.project
+.pydevproject
+.settings
+
+# pytest
+.pytest_cache/
+
+# Other
 tmp/*
