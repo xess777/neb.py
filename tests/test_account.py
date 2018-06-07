@@ -1,26 +1,37 @@
 from nebpy.account import Account
+from nebpy.utils.crypto import Crypto
 
 
 class TestAccount:
-    def test_compare_accounts(
-            self, account_from_privkey_bytes, account_from_privkey_hex):
-        assert (account_from_privkey_bytes.private_key ==
-                account_from_privkey_hex.private_key)
-        assert (account_from_privkey_bytes.public_key ==
-                account_from_privkey_hex.public_key)
 
-    def test_address(self, account_from_privkey_hex):
-        address = b'\x19Wo\x82k\r\xd8F\x1b@-\xee\x86n\xb2u\xf8\xcdk/,\x9e\xb1\xa2\xf6\xef'  # noqa
-        address_hex = '19576f826b0dd8461b402dee866eb275f8cd6b2f2c9eb1a2f6ef'
-        address_base58 = b'n1QgTYKChKZqB5TtyeVUktnQfsoUL4fi3Wn'
-        assert account_from_privkey_hex.address == address
-        assert account_from_privkey_hex.address_hex == address_hex
-        assert account_from_privkey_hex.address_base58 == address_base58
+    def test_init(self, privkey_hex, privkey_bytes, public_key, address):
+        account = Account(privkey_hex)
+        assert account.private_key == privkey_bytes
+        assert account.public_key == public_key
+        assert account.address == address
 
-    def test_verbose_address(self, account_from_privkey_hex, verbose_address):
-        assert account_from_privkey_hex.get_verbose_address() == verbose_address
+    def test_new_account(self):
+        account = Account.new_account()
+        public_key = Crypto.private_to_public(account.get_private_key())
+        assert isinstance(account, Account)
+        assert account.get_public_key() == public_key
 
-    def test_check_is_valid_address(
-            self, verbose_address, invalid_verbose_address):
-        assert Account.check_is_valid_address(verbose_address)
-        assert not Account.check_is_valid_address(invalid_verbose_address)
+    def test_set_private_key(self, privkey_hex, public_key, address):
+        account = Account.new_account()
+        account.set_private_key(privkey_hex)
+        assert account.get_public_key() == public_key
+        assert account.get_address() == address
+
+    def test_verify_address(self, verbose_address, invalid_verbose_address):
+        assert Account.verify_address(verbose_address)
+        assert not Account.verify_address(invalid_verbose_address)
+
+    def test_get_verbose_address(self, privkey_hex, verbose_address):
+        account = Account(privkey_hex)
+        assert account.get_verbose_address() == verbose_address
+
+    def from_key(self):
+        pass
+
+    def test_to_key(self):
+        pass

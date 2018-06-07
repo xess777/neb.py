@@ -1,33 +1,33 @@
 import pytest
 
-from nebpy.account import Account
-
-
-@pytest.fixture
-def privkey_bytes():
-    return b'\xca9\x12{\x81\xeb2\x0eIZ\\\x96$\xad\xa3\xf7\xda\x9aU\xd5W\xf3\x92\xadc|\x12\xc0\x84\x90\xe1\x9a'  # noqa
+from nebpy.utils.crypto import Crypto
 
 
 @pytest.fixture
 def privkey_hex():
-    return 'ca39127b81eb320e495a5c9624ada3f7da9a55d557f392ad637c12c08490e19a'
+    return '01802530e353be5e92afb44f3dff6cef9d765133e86013893a0dad9c5663778f'
 
 
 @pytest.fixture
-def account_from_privkey_bytes(privkey_bytes):
-    return Account(privkey_bytes)
+def privkey_bytes(privkey_hex):
+    return bytes.fromhex(privkey_hex)
 
 
 @pytest.fixture
-def account_from_privkey_hex(privkey_hex):
-    return Account(privkey_hex)
+def public_key(privkey_bytes):
+    return Crypto.private_to_public(privkey_bytes)
+
+
+@pytest.fixture
+def address():
+    return b'\x19Wb\xc6<\xeeg\x1bam\xaa7}\xd3\xda\xdb\x1d\x18\x91\xdbwp"$\xe2\xac'  # noqa
 
 
 @pytest.fixture
 def verbose_address():
-    return 'n1QgTYKChKZqB5TtyeVUktnQfsoUL4fi3Wn'
+    return 'n1PX812RocrhGzoeFECXvKK9T168f8tUBa3'
 
 
 @pytest.fixture
 def invalid_verbose_address():
-    return 'n1QgTYKChKZqB5TtyeVUktnQfsoUL5fi3Wn'
+    return 'n1PX812RJcrhGzoeFECXvKK9T168f8tUBa3'
